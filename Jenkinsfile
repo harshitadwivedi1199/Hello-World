@@ -1,15 +1,15 @@
 pipeline{
     agent any
-    
+    environment{
+        Dev_IP=""
+        QA_IP=""
+    }
     stages{
         stage("Download code"){
            steps{
                 git branch: 'main', url: 'https://github.com/harshitadwivedi1199/Hello-World'
            }
         }
-
-    
-    
         stage("Build docker image"){
             steps{
                 sh "sudo docker build -t harc1199/hello-world:${BUILD_TAG} ."
@@ -35,5 +35,32 @@ pipeline{
                 }
             }
         }
+        stage("Deploy in QA"){
+            steps{
+                sshagent(['DEV_QA_PROD_ENV']) {
+                    sh "ssh -o StrictHostKeyChecking=no ec2-user@54.81.157.211 sudo docker rm -f  myweb"
+                    sh "ssh ec2-user@54.81.157.211 sudo docker run -d -p 80:80 --name myweb harc1199/hello-world:${BUILD_TAG}"
+    
+                }
+            }
+        }
+        stage("Testing QA"){
+            steps{
+                sshagent(['DEV_QA_PROD_ENV']) {
+                    sh "curl --silent http://${QA_IP}/"
+                }
+            }
+        }
+        stage("Manual Approval"){
+            steps{
+                input(message: "Do you want to continue ?? ")
+            }
+        }
+        stage("Deploy in prod"){
+            steps{
+                echo "NEed to configure eks.."
+            }
+        }
+        
     }
 }
