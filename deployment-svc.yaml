@@ -20,7 +20,7 @@ spec:
          image: harc1199/hello-world:$BUILD_TAG
          ports:
          - containerPort: 80
-"""
+# Service
 apiVersion: v1
 kind: Service
 metadata:
