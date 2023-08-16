@@ -1,3 +1,3 @@
 FROM httpd:2.4.57-alpine
-COPY .  /var/www/html/
+COPY .  /usr/local/apache2/htdocs/
 EXPOSE 80
