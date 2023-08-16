@@ -1,8 +1,8 @@
 pipeline{
     agent any
     environment{
-        Dev_IP=""
-        QA_IP=""
+        Dev_IP="54.198.236.112"
+        QA_IP="54.198.236.112"
     }
     stages{
         stage("Download code"){
@@ -12,7 +12,7 @@ pipeline{
         }
         stage("Build docker image"){
             steps{
-                sh "sudo docker build -t harc1199/hello-world:${BUILD_TAG} ."
+                sh " docker build -t harc1199/hello-world:${BUILD_TAG} ."
             }
         }
         
@@ -29,8 +29,8 @@ pipeline{
         stage("Deploy in Dev"){
             steps{
                 sshagent(['DEV_QA_PROD_ENV']) {
-                    sh "ssh -o StrictHostKeyChecking=no ec2-user@54.81.157.211 sudo docker rm -f  myweb"
-                    sh "ssh ec2-user@54.81.157.211 sudo docker run -d -p 80:80 --name myweb harc1199/hello-world:${BUILD_TAG}"
+                    sh "ssh -o StrictHostKeyChecking=no ec2-user@${Dev_IP} sudo docker rm -f  myweb"
+                    sh "ssh ec2-user@${Dev_IP} sudo docker run -d -p 80:80 --name myweb harc1199/hello-world:${BUILD_TAG}"
     
                 }
             }
@@ -38,8 +38,8 @@ pipeline{
         stage("Deploy in QA"){
             steps{
                 sshagent(['DEV_QA_PROD_ENV']) {
-                    sh "ssh -o StrictHostKeyChecking=no ec2-user@54.81.157.211 sudo docker rm -f  myweb"
-                    sh "ssh ec2-user@54.81.157.211 sudo docker run -d -p 80:80 --name myweb harc1199/hello-world:${BUILD_TAG}"
+                    sh "ssh -o StrictHostKeyChecking=no ec2-user@${QA_IP} sudo docker rm -f  myweb"
+                    sh "ssh ec2-user@${QA_IP} sudo docker run -d -p 80:80 --name myweb harc1199/hello-world:${BUILD_TAG}"
     
                 }
             }
