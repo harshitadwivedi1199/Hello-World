@@ -25,7 +25,15 @@ pipeline{
                 }
             }
         }
-        
+        stage("Deploy in Dev"){
+            steps{
+                // sshagent(['DEV_QA_PROD_ENV']) {
+                    sh "docker rm -f  myweb"
+                    sh "docker run -d -p 80:80 --name myweb harc1199/hello-world:${BUILD_TAG}"
+    
+                // }
+            }
+        }
         // stage("Deploy in Dev"){
         //     steps{
         //         sshagent(['DEV_QA_PROD_ENV']) {
