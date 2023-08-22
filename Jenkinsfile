@@ -26,15 +26,15 @@ pipeline{
             }
         }
         
-        stage("Deploy in Dev"){
-            steps{
-                sshagent(['DEV_QA_PROD_ENV']) {
-                    sh "ssh -o StrictHostKeyChecking=no ec2-user@${Dev_IP} sudo docker rm -f  myweb"
-                    sh "ssh ec2-user@${Dev_IP} sudo docker run -d -p 80:80 --name myweb harc1199/hello-world:${BUILD_TAG}"
+        // stage("Deploy in Dev"){
+        //     steps{
+        //         sshagent(['DEV_QA_PROD_ENV']) {
+        //             sh "ssh -o StrictHostKeyChecking=no ec2-user@${Dev_IP} sudo docker rm -f  myweb"
+        //             sh "ssh ec2-user@${Dev_IP} sudo docker run -d -p 80:80 --name myweb harc1199/hello-world:${BUILD_TAG}"
     
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
         stage("Deploy in QA"){
             steps{
                 sshagent(['DEV_QA_PROD_ENV']) {
