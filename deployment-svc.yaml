@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       -  name: myweb
-         image: harc1199/hello-world:$BUILD_TAG
+         image: harc1199/hello-world:jenkins-hello-world-15
          ports:
          - containerPort: 80
 # Service
