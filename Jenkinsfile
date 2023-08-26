@@ -3,6 +3,7 @@ pipeline{
     environment{
         Dev_IP="13.233.75.23"
         QA_IP="13.233.75.23"
+        BUILD_TAG= "${env.BUILD_TAG}"
     }
     stages{
         stage("Download code"){
@@ -66,7 +67,13 @@ pipeline{
         }
         stage("Deploy in prod"){
             steps{
-                echo "NEed to configure eks.."
+                withAWS(credentials: AWS_CREDENTIALS, region: 'ap-south-1') {
+                  script {
+                    sh ('aws eks update-kubeconfig --name mucluster  --region 'ap-south-1')
+                    sh "kubectl apply -f deployment-svc.yaml"
+                    }            
+                  }
+
             }
         }
         
