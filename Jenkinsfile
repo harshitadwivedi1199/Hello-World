@@ -71,6 +71,7 @@ pipeline{
                   script {
                     sh ('aws eks update-kubeconfig --name mucluster  --region 'ap-south-1')
                     sh "kubectl apply -f deployment-svc.yaml"
+                    //sh "sed -i 's|image: harc1199/hello-world:\\\$BUILD_TAG|image: harc1199/hello-world:${BUILD_TAG}|' path/to/your/kubernetes-manifest.yaml"
                     }            
                   }
 
